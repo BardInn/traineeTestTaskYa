@@ -1,0 +1,2 @@
+css: .search3__button-svg
+XPath: //button[contains(@type, 'submit')]
