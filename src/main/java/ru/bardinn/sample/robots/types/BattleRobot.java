@@ -1,4 +1,4 @@
-package ru.bardinn.sample.robots;
+package ru.bardinn.sample.robots.types;
 
 import ru.bardinn.sample.robots.enums.Action;
 import ru.bardinn.sample.robots.enums.EnergyType;
@@ -11,18 +11,14 @@ class BattleRobot extends Robot {     //наследование
 		super(movingType, energyType);
 	}
 
-	@Override
-	public void refill(Fuel fuel) {          //инкапсуляция
-		fuelLevel = fuel.fill(fuelLevel);
-	}
 
 	@Override
 	public boolean makeAction(Action action) {
-		if(action == Action.BANG ){
-			fuelLevel -=20;
+		if (hasFuel() && action == Action.BANG) {
+			this.fuel.use();
 			return true;
-		}else {
-			throw new RuntimeException("Данный робот так не умеет");
+		} else {
+			throw new RuntimeException("Данный робот так не умеет или недостаточно топлива");
 		}
 	}
 }

@@ -1,12 +1,15 @@
 package ru.bardinn.robotTests;
 
 import org.junit.jupiter.api.Test;
-import ru.bardinn.sample.robots.Robot;
-import ru.bardinn.sample.robots.RobotFabric;
+import ru.bardinn.sample.robots.fuel.GasolineFuel;
+import ru.bardinn.sample.robots.fuel.NuclearFuel;
+import ru.bardinn.sample.robots.types.Robot;
+import ru.bardinn.sample.robots.types.RobotFabric;
 import ru.bardinn.sample.robots.enums.EnergyType;
 import ru.bardinn.sample.robots.enums.MovingType;
 import ru.bardinn.sample.robots.enums.RobotType;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static ru.bardinn.sample.robots.enums.Action.*;
 
@@ -64,6 +67,39 @@ public class RobotTests {
 	public void WelderRobotWithGasolineFuelTest() {
 		Robot stranger = RobotFabric.makeRobot(MovingType.FLY, EnergyType.GASOLINE, RobotType.WELDER);
 		assertTrue(stranger.makeAction(WELDING_PARTS));
+	}
+
+	@Test
+	public void RefillGasolineRobotTest() {
+		int fullTank = 100;
+		Robot still = RobotFabric.makeRobot(MovingType.WALK, EnergyType.GASOLINE, RobotType.WELDER);
+		while(still.hasFuel()){
+			still.makeAction(WELDING_PARTS);
+		}
+		still.fill(EnergyType.GASOLINE);
+		assertEquals(fullTank, still.getFuelLevel());
+	}
+
+	@Test
+	public void RefillNuclearRobotTest() {
+		int yearsOfUse = 0;
+		Robot power = RobotFabric.makeRobot(MovingType.FLY, EnergyType.NUCLEAR, RobotType.BATTLE);
+		while(power.hasFuel()){
+			power.makeAction(BANG);
+		}
+		power.fill(EnergyType.NUCLEAR);
+		assertEquals(yearsOfUse, ((NuclearFuel)power.getFuel()).getYearFromFilling());
+	}
+
+	@Test
+	public void RefillElectricPowerTest() {
+		int fullTank = 100;
+		Robot thunder = RobotFabric.makeRobot(MovingType.RIDE, EnergyType.ELECTRIC, RobotType.CHEF);
+		while(thunder.hasFuel()){
+			thunder.makeAction(COOK);
+		}
+		thunder.fill(EnergyType.ELECTRIC);
+		assertEquals(fullTank, thunder.getFuelLevel());
 	}
 
 }
